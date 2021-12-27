@@ -1,10 +1,8 @@
 package pojo.courier;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-
 import static data.CourierDataGenerator.*;
 
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+
 public class Courier {
     public String login;
     public String password;

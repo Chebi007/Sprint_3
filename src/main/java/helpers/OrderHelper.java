@@ -33,7 +33,7 @@ public class OrderHelper extends RestAssuredHelper {
     }
 
     @Step("Get order by track number")
-    public ValidatableResponse getOrderByTrackNumber(int trackNumber) {
+    public ValidatableResponse getOrderByTrackNumber(Object trackNumber) {
         return given()
                 .filter(new AllureRestAssured())
                 .spec(getBaseSpec())
@@ -43,47 +43,14 @@ public class OrderHelper extends RestAssuredHelper {
                 .then();
     }
 
-    @Step("Get order without track number")
-    public ValidatableResponse getOrderWithoutTrackNumber() {
-        return given()
-                .filter(new AllureRestAssured())
-                .spec(getBaseSpec())
-                .and()
-                .queryParam("t")
-                .get(EndPoints.GET_ORDER_BY_TRACK)
-                .then();
-    }
-
     @Step("Accept order")
-    public ValidatableResponse acceptOrder(int courierId, int orderId) {
+    public ValidatableResponse acceptOrder(Object courierId, Object orderId) {
         return given()
                 .filter(new AllureRestAssured())
                 .spec(getBaseSpec())
                 .and()
                 .queryParam("courierId", courierId)
                 .put(EndPoints.ACCEPT_ORDER + orderId)
-                .then();
-    }
-
-    @Step("Accept order without courierId")
-    public ValidatableResponse acceptOrderWithoutCourierId(int orderId) {
-        return given()
-                .filter(new AllureRestAssured())
-                .spec(getBaseSpec())
-                .and()
-                .queryParam("courierId")
-                .put(EndPoints.ACCEPT_ORDER + orderId)
-                .then();
-    }
-
-    @Step("Accept order without orderId")
-    public ValidatableResponse acceptOrderWithoutOrderId(int courierId) {
-        return given()
-                .filter(new AllureRestAssured())
-                .spec(getBaseSpec())
-                .and()
-                .queryParam("courierId", courierId)
-                .put(EndPoints.ACCEPT_ORDER)
                 .then();
     }
 }

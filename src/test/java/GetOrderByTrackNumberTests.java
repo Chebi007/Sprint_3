@@ -13,6 +13,8 @@ import pojo.courier.Courier;
 import pojo.courier.CourierCredentials;
 import pojo.order.Order;
 
+import java.util.List;
+
 import static org.apache.http.HttpStatus.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
@@ -42,7 +44,7 @@ public class GetOrderByTrackNumberTests {
                 courierHelper.loginCourier(CourierCredentials.getCourierCredentials(courier));
         courierId = responseLoginCourier.extract().path("id");
 
-        Order order = Order.getRandomOrder("GREY");
+        Order order = Order.getRandomOrder(List.of("GREY"));
         ValidatableResponse responseCreateOrder = orderHelper.createOrder(order);
         responseCreateOrder.assertThat().statusCode(SC_CREATED);
         orderTrack = responseCreateOrder.extract().path("track");
@@ -57,7 +59,8 @@ public class GetOrderByTrackNumberTests {
     @Test
     @Description("Get order without track number")
     public void getOrderWithoutTrackNumber() {
-        ValidatableResponse response = orderHelper.getOrderWithoutTrackNumber();
+        String orderTrack = "";
+        ValidatableResponse response = orderHelper.getOrderByTrackNumber(orderTrack);
 
         String actualErrorMessage = response.extract().path("message");
         String expectedErrorMessage = "Недостаточно данных для поиска";
@@ -84,6 +87,6 @@ public class GetOrderByTrackNumberTests {
     @Step("Teardown - delete courier")
     public void tearDown() {
         if (courierId != 0)
-            courierHelper.deleteCourierById(courierId);
+            courierHelper.deleteCourier(courierId);
     }
 }

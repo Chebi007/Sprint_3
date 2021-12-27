@@ -34,33 +34,13 @@ public class CourierHelper extends RestAssuredHelper {
                 .then();
     }
 
-    @Step("Delete courier by Id")
-    public ValidatableResponse deleteCourierById(int courierId) {
+    @Step("Delete courier")
+    public ValidatableResponse deleteCourier(Object courierId) {
         return given()
                 .filter(new AllureRestAssured())
                 .spec(getBaseSpec())
                 .when()
                 .delete(EndPoints.DELETE_COURIER + courierId)
-                .then();
-    }
-
-    @Step("Delete courier without Id")
-    public ValidatableResponse deleteCourierWithoutId() {
-        return given()
-                .filter(new AllureRestAssured())
-                .spec(getBaseSpec())
-                .when()
-                .delete(EndPoints.DELETE_COURIER)
-                .then();
-    }
-
-    @Step("Delete courier by invalid id")
-    public ValidatableResponse deleteCourierInvalidCourierId(String invalidCourierId) {
-        return given()
-                .filter(new AllureRestAssured())
-                .spec(getBaseSpec())
-                .when()
-                .delete(EndPoints.DELETE_COURIER + invalidCourierId)
                 .then();
     }
 }

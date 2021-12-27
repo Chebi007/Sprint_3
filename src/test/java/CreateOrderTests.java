@@ -10,16 +10,18 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.util.List;
+
 import static org.apache.http.HttpStatus.SC_CREATED;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
 public class CreateOrderTests {
 
-    public final String colorVariable;
+    private final List<String> colorVariable;
 
-    public CreateOrderTests(String colorVariable) {
+    public CreateOrderTests(List<String> colorVariable) {
         this.colorVariable = colorVariable;
     }
 
@@ -32,11 +34,11 @@ public class CreateOrderTests {
     @Parameterized.Parameters
     public static Object[] getColor() {
         return new Object[][] {
-                {"GREY\" , \"BLACK"},
-                {"GREY"},
-                {"BLACK"},
-                {""},
-                {null}
+                {List.of("GREY", "BLACK")},
+                {List.of("GREY")},
+                {List.of("BLACK")},
+                {List.of("")},
+                {null},
         };
     }
 

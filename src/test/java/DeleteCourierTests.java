@@ -37,7 +37,7 @@ public class DeleteCourierTests {
 
         int courierId = responseLoginCourier.extract().path("id");
 
-        ValidatableResponse responseDeleteCourier = courierHelper.deleteCourierById(courierId);
+        ValidatableResponse responseDeleteCourier = courierHelper.deleteCourier(courierId);
         boolean isCourierDeleted = responseDeleteCourier.extract().path("ok");
 
         responseDeleteCourier.assertThat().statusCode(SC_OK);
@@ -47,7 +47,7 @@ public class DeleteCourierTests {
     @Test
     @Description("Delete courier without id")
     public void deleteCourierWithoutId() {
-        ValidatableResponse responseDeleteCourier = courierHelper.deleteCourierWithoutId();
+        ValidatableResponse responseDeleteCourier = courierHelper.deleteCourier("");
 
         String actualErrorMessage = responseDeleteCourier.extract().path("message");
         String expectedErrorMessage = "Недостаточно данных для удаления курьера";
@@ -60,8 +60,7 @@ public class DeleteCourierTests {
     @Test
     @Description("Delete courier with wrong id")
     public void deleteCourierWrongId() {
-        int wrongCourierId = 111111111;
-        ValidatableResponse responseDeleteCourier = courierHelper.deleteCourierById(wrongCourierId);
+        ValidatableResponse responseDeleteCourier = courierHelper.deleteCourier(111111111);
 
         String actualErrorMessage = responseDeleteCourier.extract().path("message");
         String expectedErrorMessage = "Курьера с таким id нет.";
@@ -74,13 +73,12 @@ public class DeleteCourierTests {
     @Test
     @Description("Delete courier wrong query")
     public void deleteCourierInvalidId() {
-        String invalidCourierId = "!";
-        ValidatableResponse responseDeleteCourier = courierHelper.deleteCourierInvalidCourierId(invalidCourierId);
+        ValidatableResponse responseDeleteCourier = courierHelper.deleteCourier('@');
 
         String actualErrorMessage = responseDeleteCourier.extract().path("message");
-        String expectedErrorMessage = "invalid input syntax for type integer: \"!\"";
+        String expectedErrorMessage = "Курьера с таким id нет.";
 
-        responseDeleteCourier.assertThat().statusCode(SC_INTERNAL_SERVER_ERROR);
+        responseDeleteCourier.assertThat().statusCode(SC_NOT_FOUND);
         assertEquals("Фактическое сообщение в ответе отличается от ожидаемого", expectedErrorMessage,
                 actualErrorMessage);
     }

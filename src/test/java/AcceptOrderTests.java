@@ -13,6 +13,8 @@ import pojo.courier.Courier;
 import pojo.courier.CourierCredentials;
 import pojo.order.Order;
 
+import java.util.List;
+
 import static org.apache.http.HttpStatus.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -36,7 +38,7 @@ public class AcceptOrderTests {
         courierId = responseLoginCourier.extract().path("id");
 
         orderHelper = new OrderHelper();
-        Order order = Order.getRandomOrder("BLACK");
+        Order order = Order.getRandomOrder(List.of("BLACK"));
         ValidatableResponse responseCreateOrder = orderHelper.createOrder(order);
         responseCreateOrder.assertThat().statusCode(SC_CREATED);
         orderTrackId = responseCreateOrder.extract().path("track");
@@ -62,7 +64,7 @@ public class AcceptOrderTests {
     @Test
     @Description("Accept order without courierId")
     public void acceptOrderWithoutCourierId() {
-        ValidatableResponse response = orderHelper.acceptOrderWithoutCourierId(orderId);
+        ValidatableResponse response = orderHelper.acceptOrder("", orderId);
 
         String actualErrorMessage = response.extract().path("message");
         String expectedErrorMessage = "Недостаточно данных для поиска";
@@ -88,7 +90,7 @@ public class AcceptOrderTests {
     @Test
     @Description("Accept order without orderId")
     public void acceptOrderWithoutOrderId() {
-        ValidatableResponse response = orderHelper.acceptOrderWithoutOrderId(courierId);
+        ValidatableResponse response = orderHelper.acceptOrder(courierId, "");
 
         String actualErrorMessage = response.extract().path("message");
         String expectedErrorMessage = "Недостаточно данных для поиска";
@@ -115,6 +117,6 @@ public class AcceptOrderTests {
     @Step("Teardown - delete courier")
     public void tearDown() {
         if (courierId != 0)
-            courierHelper.deleteCourierById(courierId);
+            courierHelper.deleteCourier(courierId);
     }
 }

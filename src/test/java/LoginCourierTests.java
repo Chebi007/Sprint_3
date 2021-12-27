@@ -1,4 +1,3 @@
-import common.EndPoints;
 import helpers.CourierHelper;
 import io.qameta.allure.Description;
 import io.qameta.allure.Step;
@@ -126,6 +125,6 @@ public class LoginCourierTests {
     @Step("Teardown - delete courier")
     public void tearDown() {
         if (courierId != 0)
-            courierHelper.deleteCourierById(courierId);
+            courierHelper.deleteCourier(courierId);
     }
 }

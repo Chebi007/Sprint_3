@@ -43,7 +43,7 @@ public class GetOrdersListTests {
                 courierHelper.loginCourier(CourierCredentials.getCourierCredentials(courier));
         courierId = responseLoginCourier.extract().path("id");
 
-        Order order = Order.getRandomOrder("BLACK");
+        Order order = Order.getRandomOrder(List.of("BLACK"));
         ValidatableResponse responseCreateOrder = orderHelper.createOrder(order);
         responseCreateOrder.assertThat().statusCode(SC_CREATED);
         orderTrack = responseCreateOrder.extract().path("track");
@@ -65,6 +65,6 @@ public class GetOrdersListTests {
     @Step("Teardown - delete courier")
     public void tearDown() {
         if (courierId != 0)
-            courierHelper.deleteCourierById(courierId);
+            courierHelper.deleteCourier(courierId);
     }
 }
