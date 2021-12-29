@@ -66,6 +66,26 @@ public class LoginCourierTests {
     }
 
     @Test
+    @Description("Login courier with null password")
+    public void loginCourierNullPassword() {
+        Courier courier = Courier.getRandom();
+        courierHelper.createCourier(courier);
+        ValidatableResponse responseLoginCourier =
+                courierHelper.loginCourier(new CourierCredentials(courier.login, null));
+
+        String actualErrorMessage = responseLoginCourier.extract().path("message");
+        String expectedErrorMessage = "Недостаточно данных для входа";
+
+        responseLoginCourier.assertThat().statusCode(SC_BAD_REQUEST);
+        assertEquals("Фактическое сообщение в ответе отличается от ожидаемого", expectedErrorMessage,
+                actualErrorMessage);
+
+        ValidatableResponse responseLoginCourierForID =
+                courierHelper.loginCourier(CourierCredentials.getCourierCredentials(courier));
+        courierId = responseLoginCourierForID.extract().path("id");
+    }
+
+    @Test
     @Description("Login courier with only password")
     public void loginCourierOnlyPassword() {
         Courier courier = Courier.getRandom();
